@@ -14,6 +14,7 @@
 			searchValue,
 			totalCount,
 			imageSrc,
+			typeTimer,
 			GIFTimeout,
 			timer;
 
@@ -81,52 +82,47 @@
 
 	// Search and Load New Posts
 	function loadNewPosts() {
-		var typeTimer;
-		if ( typeTimer ) {
-			clearTimeout( typeTimer );
-		} else {
-			typeTimer = setTimeout( function() {
+		clearTimeout( typeTimer );
+		typeTimer = setTimeout( function() {
 
-				if ( searchValue == $search[0].value ) {
-					return;
-				}
+			if ( searchValue == $search[0].value ) {
+				return;
+			}
 
-				$mainList.addClass( 'main-list--loading' );
+			$mainList.addClass( 'main-list--loading' );
 
-				resetOffset();
-				
-				searchValue = $search[0].value;
-				searchValueEnc = encodeSpacesURL( searchValue );
+			resetOffset();
+			
+			searchValue = $search[0].value;
+			searchValueEnc = encodeSpacesURL( searchValue );
 
-				if ( searchValue ) {
+			if ( searchValue ) {
 
-					$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
-					.done( function( data ) {
-						totalCount = data.pagination.total_count;
-						if ( totalCount != 0 ) {
-							( totalCount > limit ) ? showPagination() : hidePagination();
-							$mainList.html( renderHTML( data.data ) );
-						} else {
-							loadSinglePost404();
-						}
-					} )
-					.fail( function() {
-						console.log( 'error' );
-					} );
-
-				} else {
-
-					$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
-					.done( function( data ) {
-						showPagination();
+				$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
+				.done( function( data ) {
+					console.log( 'test' );
+					totalCount = data.pagination.total_count;
+					if ( totalCount != 0 ) {
+						( totalCount > limit ) ? showPagination() : hidePagination();
 						$mainList.html( renderHTML( data.data ) );
-					} );
+					} else {
+						loadSinglePost404();
+					}
+				} )
+				.fail( function() {
+					console.log( 'error' );
+				} );
 
-				}
+			} else {
 
+				$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
+				.done( function( data ) {
+					showPagination();
+					$mainList.html( renderHTML( data.data ) );
+				} );
 
-			}, 2000 );
-		}
+			}
+		}, 2000 );
 	}
 
 	// Load More Posts on Scroll
@@ -176,11 +172,9 @@
 	function renderHTML( data ) {
 		var desctopWidthStillSrc;
 		var htmlstring = '';
-		console.log( data );
 		if ( data.length ) {
 			for ( var i = 0; i < data.length; i++ ) {
 				desctopWidthStillSrc = data[i].images.fixed_width_still.url;
-
 				htmlstring += '<div class="columns__column columns__column--xs-1-2 columns__column--sm-1-4">';
 					htmlstring += '<figure class="main-list__item">';
 						htmlstring += '<img class="main-list__item-img" src="' + desctopWidthStillSrc + '" alt="" />';
