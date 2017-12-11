@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scaleble=no">
+	<title>Search Giphy</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="site site--bg">
+	
+	<!-- Header -->
+
+	<header class="site__header header">
+		<nav class="header__navigation">	
+			<div class="site__width">
+				<div class="columns columns--align-middle">
+					<div class="columns__column columns__column--sm-1-4">
+						<div class="header__logo logo logo--header">
+							<a class="logo__link" href="index.html">
+								<img class="logo__img" src="img/logo.gif" alt="logo">
+							</a>
+						</div>
+					</div>
+					<div class="columns__column columns__column--sm-3-4">
+						<div class="header__search search search--header">
+							<form id="search-form" class="search__form" action="#" method="post" name="search">
+								<input id="search" class="search__input" type="text" placeholder="search" />
+							</form>
+							<div class="to-top__wrapper">
+								<a id="to-top" href="#" title="Scroll page to top" class="to-top icon-arrow-up"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<section class="site__main main">
+		<div class="site__width">
+			<div id="main-list" class="columns main-list">
+			</div>
+			<div class="main-list__loader"><img src="img/loading.gif" alt="" />Loading...</div>
+			<p class="text-center pagination"><a href="#" id="show-more" class="button">Show More</a></p>
+
+		</div>
+	</section>
+	
+	<!-- To Top -->
+
+	<script src="js/libs.min.js"></script>
+	<script src="js/common.js"></script>
+
+</body>
+</html>

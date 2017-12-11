@@ -1,0 +1,22 @@
+.button {
+	background-color: $color__light;
+	border: 1px solid $color__light;
+	color: $color__dark;
+	cursor: pointer;
+	display: inline-block;
+	font-family: $font__title;
+	font-size: 1.4rem;
+	font-weight: bold;
+	letter-spacing: 0.08em;
+	line-height: 1em;
+	padding: 1.464286em 4.75em;
+	text-decoration: none;
+	text-transform: uppercase;
+	transition: background-color 0.3s, color 0.3s;
+	vertical-align: top;
+
+	&:hover {
+		background-color: transparent;
+		color: $color__light;
+	}
+}

@@ -1,0 +1,26 @@
+.to-top {
+	color: darken($color__light, 40%);
+	display: block;
+	font-size: 1.4rem;
+	text-align: center;
+	text-decoration: none;
+	transition: color 0.3s;
+
+	&:before {
+		line-height: 2.8125em;
+		margin: 0;
+		width: auto;
+	}
+
+	&:active,
+	&:focus {
+		color: darken($color__light, 40%);
+	}
+	
+	&:hover {
+		color: $color__dark;
+	}
+}
+
+@import 'to-top/__wrapper';
+@import 'to-top/--active';

@@ -1,0 +1,7 @@
+.columns__column--sm-3-4 {
+	
+	@media (min-width: $screen-sm-min) {
+		flex: 0 0 75%;
+		max-width: 75%;
+	}
+}

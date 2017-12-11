@@ -1,0 +1,8 @@
+.main-list {
+	transition: opacity 0.3s;
+}
+
+@import 'main-list/__item';
+@import 'main-list/__item-img';
+@import 'main-list/__loader';
+@import 'main-list/--loading';
