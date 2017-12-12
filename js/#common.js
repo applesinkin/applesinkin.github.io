@@ -15,9 +15,9 @@
 			totalCount,
 			imageSrc,
 			
-			timerImg,
-			timerSearchType,
-			timerScroll;
+			GIFTimeout,
+			typeTimer,
+			timer;
 
 
 	// Get random posts
@@ -26,24 +26,21 @@
 		$mainList.html( renderHTML( data.data ) );
 	} );
 
-
 	// Get More Posts on Button Click
 	$( 'body' ).on( 'click', '#show-more', function( event ) {
 		event.preventDefault();
 		loadMorePosts( searchValue );
-	} );
-
+	} );	
 
 	// Get More Posts on Scroll ( "infinite" scroll )
 	$( window ).on( 'scroll', function() {
-		if( timerScroll ) {
-			window.clearTimeout(timerScroll);
+		if( timer ) {
+			window.clearTimeout(timer);
 		}
-		timerScroll = window.setTimeout( function() {
+		timer = window.setTimeout( function() {
 			loadMorePostsOnScroll( searchValue );
 		}, 100 );
 	} );
-
 
 	// Load New Posts on Form Submit
 	$searchForm.on( 'submit', function( event ) {
@@ -51,30 +48,26 @@
 		loadNewPosts();
 	} );
 
-
 	// Load New Posts on Live Search
 	$search.on( 'keyup', function( e ) {
 		loadNewPosts();
 	} );
 
 
-
 	// Load Gif on MouseOver
 	$( 'body' )
 	.on( 'mouseenter', '.main-list__item-img', function() {
 		$this = $( this );
-		console.log( $this );
 		imageSrc = $this.attr( 'src' );
 
-		timerImg = window.setTimeout( function() {
+		GIFTimeout = window.setTimeout( function() {
 			showGIF( $this );
 		}, 500 );
 	} )
 	.on( 'mouseleave', '.main-list__item-img', function() {
-		clearTimeout( timerImg );
+		clearTimeout( GIFTimeout );
 		hideGIF( $this );
 	} );
-
 
 	// Animation on Ajax Request 
 	$( document ).ajaxComplete( function() {
@@ -86,7 +79,6 @@
 			hidePagination();
 		}
 	} );
-
 
 	function showGIF( image ) {
 		image.attr( 'src', function( img, src ) {
@@ -102,51 +94,55 @@
 
 	// Search and Load New Posts
 	function loadNewPosts() {
-		clearTimeout( timerSearchType );
-		timerSearchType = setTimeout( function() {
-			
+		clearTimeout( typeTimer );
+		typeTimer = setTimeout( function() {
+
 			if ( searchValue == $search[0].value ) {
 				return;
 			}
 
 			$mainList.addClass( 'main-list--loading' );
-			
-			resetOffset();
-			searchValue = $search[0].value;
 
-			if ( !searchValue ) {
-				
+			resetOffset();
+			
+			searchValue = $search[0].value;
+			searchValueEnc = encodeSpacesURL( searchValue );
+
+			if ( searchValue ) {
+
+				$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
+				.done( function( data ) {
+					console.log( 'test' );
+					totalCount = data.pagination.total_count;
+					if ( totalCount != 0 ) {
+						( totalCount > limit ) ? showPagination() : hidePagination();
+						$mainList.html( renderHTML( data.data ) );
+					} else {
+						loadSinglePost404();
+					}
+				} )
+				.fail( function() {
+					console.log( 'error' );
+				} );
+
+			} else {
+
 				$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
 				.done( function( data ) {
 					showPagination();
 					$mainList.html( renderHTML( data.data ) );
 				} );
 
-				return;
 			}
-
-			searchValueEnc = encodeSpacesURL( searchValue );
-			
-			$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
-			.done( function( data ) {
-				totalCount = data.pagination.total_count;
-				if ( totalCount != 0 ) {
-					( totalCount > limit ) ? showPagination() : hidePagination();
-					$mainList.html( renderHTML( data.data ) );
-				} else {
-					loadSinglePost404();
-				}
-			} );
-
-		}, 1000 );
-	};
+		}, 2000 );
+	}
 
 	// Load More Posts on Scroll
 	function loadMorePostsOnScroll( search ) {
 		if ( $( window ).scrollTop() + $( window ).height() >= ( $( document ).height() - 100 ) ) {
 			loadMorePosts( searchValue );
 		}
-	};
+	}
 
 	// Load More Posts
 	function loadMorePosts( search ) {
@@ -175,55 +171,56 @@
 		} );
 	};
 
-	// Load Single 404 Post
+	// Load Single Post
 	function loadSinglePost404() {
 		$.get( '//api.giphy.com/v1/gifs/random?api_key=' + apiKey + '&tag=404' )
 		.done( function( data ) {
 			hidePagination();
-			$mainList.html( renderHTML404( data.data ) );
+			$mainList.html( 'Not Found' + renderHTML( data.data ) );
 		} );
-	};
+	}
+
+	function createImage() {
+
+	}
 
 	// Generate HTML code
 	function renderHTML( data ) {
 		var desctopWidthStillSrc;
 		var htmlstring = '';
-		for ( var i = 0; i < data.length; i++ ) {
-			desctopWidthStillSrc = data[i].images.fixed_width_still.url;
-			htmlstring += '<div class="columns__column columns__column--xs-1-2 columns__column--sm-1-4">';
+		if ( data.length ) {
+			for ( var i = 0; i < data.length; i++ ) {
+				desctopWidthStillSrc = data[i].images.fixed_width_still.url;
+				htmlstring += '<div class="columns__column columns__column--xs-1-2 columns__column--sm-1-4">';
+					htmlstring += '<figure class="main-list__item">';
+						htmlstring += '<img class= "main-list__item-img" src="' + desctopWidthStillSrc + '" alt="" />';
+					htmlstring += '</div>';
+				htmlstring += '</div>';
+			}
+		} else {
+			htmlstring += '<div class="columns__column columns__column--sm-3-4 text-center">';
 				htmlstring += '<figure class="main-list__item">';
-					htmlstring += '<img class= "main-list__item-img" src="' + desctopWidthStillSrc + '" alt="" />';
+					htmlstring += '<img class="main-list__item-img" src="' + data.image_original_url + '" alt="" />';
 				htmlstring += '</div>';
 			htmlstring += '</div>';
 		}
 		return htmlstring;
-	};
-
-	function renderHTML404( data ) {
-		var htmlstring = '';
-		htmlstring += '<div class="columns__column columns__column--sm-3-4 text-center">';
-			htmlstring += '<h5 class="main-list__item-title">Not Found</h5>';
-			htmlstring += '<figure class="main-list__item main-list__item--not-found">';
-				htmlstring += '<img class="main-list__item-img" src="' + data.image_original_url + '" alt="" />';
-			htmlstring += '</div>';
-		htmlstring += '</div>';
-		return htmlstring;
-	};
+	}
 
 	// Increase Offset
 	function increaseOffset() {
 		offset += limit;
-	};
+	}
 
 	// Reset Offset
 	function resetOffset() {
 		offset = 0;
-	};
+	}
 
 	// Encode URI compomnent
 	function encodeSpacesURL ( value ) {
 		return encodeURIComponent( value ).replace( /%20/g, '+' );
-	};
+	}
 
 	// Hide Pagination
 	function hidePagination() {
@@ -232,14 +229,14 @@
 		} else {
 			$( '.pagination' ).addClass( 'pagination--hidden' );
 		}
-	};
+	}
 
 	// Show Pagination
 	function showPagination() {
 		if ( $( '.pagination' ).hasClass( 'pagination--hidden' ) ) {
 			$( '.pagination' ).removeClass( 'pagination--hidden' );
 		}
-	};
+	}
 
 
 	/*	To Top */
@@ -262,6 +259,6 @@
 				scrollTop: 0
 			}, scrollSpeed );
 		}
-	};
+	}
 
 } ) ( jQuery );

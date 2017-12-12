@@ -368,6 +368,9 @@ input.search__input {
   padding-bottom: 1rem;
   padding-top: 1rem; }
 
+.main-list__item-title {
+  color: #ffffff; }
+
 .main-list__item-img {
   height: auto;
   width: 100%; }
