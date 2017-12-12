@@ -10,7 +10,7 @@
 			
 			apiKey = 'Fv9vt97HVlMizqjnYOcWlB0rJlVtUKZp',
 			infiniteScroll = true,
-			limit = 16,
+			limit = 20,
 			offset = 0,
 			searchValue,
 			totalCount,
@@ -90,13 +90,13 @@
 
 	// Animation on Ajax Request 
 	$( document ).ajaxComplete( function() {
-		if ( $mainList.hasClass( 'main-list--loading' ) ) {
-			// $mainList.removeClass( 'main-list--loading' );
-		}
 
-		if ( infiniteScroll && ( ( $( document ).height() ) > $( window ).height() ) ) {
-			hidePagination();
-		}
+		$( '.main-list__item-img' ).on( 'load', function() {
+			if ( infiniteScroll && ( ( $( document ).height() ) > $( window ).height() ) ) {
+				hidePagination();
+			}
+		} );
+
 	} );
 
 
@@ -209,13 +209,17 @@
 
 	// Generate HTML code
 	function renderHTML( data ) {
-		var desctopWidthStillSrc;
+		var desctopWidthStillSrc,
+				desctopWidthStillWidth,
+				desctopWidthStillHeight;
 		var htmlstring = '';
 		for ( var i = 0; i < data.length; i++ ) {
 			desctopWidthStillSrc = data[i].images.fixed_width_still.url;
+			desctopWidthStillWidth = data[i].images.fixed_width_still.width;
+			desctopWidthStillHeight = data[i].images.fixed_width_still.height;
 			htmlstring += '<div class="columns__column columns__column--xs-1-2 columns__column--sm-1-4">';
 				htmlstring += '<figure class="main-list__item">';
-					htmlstring += '<img class= "main-list__item-img" src="' + desctopWidthStillSrc + '" alt="" />';
+					htmlstring += '<img class= "main-list__item-img" src="' + desctopWidthStillSrc + '" width="' + desctopWidthStillWidth + '" height="' + desctopWidthStillHeight + '" alt="" />';
 				htmlstring += '</div>';
 			htmlstring += '</div>';
 		}
