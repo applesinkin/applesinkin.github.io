@@ -5,6 +5,7 @@
 	var $search = $( '#search' ),
 			$mainList = $( "#main-list" ),
 			$searchForm = $( '#search-form' ),
+			$headerNav = $( '.header__navigation' ),
 			$listLoader = $( '.main-list__loader' ),
 			
 			apiKey = 'Fv9vt97HVlMizqjnYOcWlB0rJlVtUKZp',
@@ -36,6 +37,14 @@
 
 	// Get More Posts on Scroll ( "infinite" scroll )
 	$( window ).on( 'scroll', function() {
+
+		if ( $( window ).scrollTop() ) {
+			$headerNav.addClass( 'header__navigation--affix' );
+		} else {
+			$headerNav.removeClass( 'header__navigation--affix' );
+		}
+
+
 		if( timerScroll ) {
 			window.clearTimeout(timerScroll);
 		}
@@ -63,7 +72,6 @@
 	$( 'body' )
 	.on( 'mouseenter', '.main-list__item-img', function() {
 		$this = $( this );
-		console.log( $this );
 		imageSrc = $this.attr( 'src' );
 
 		timerImg = window.setTimeout( function() {
@@ -100,6 +108,13 @@
 			// $mainList.addClass( 'main-list--loading' );
 			
 			resetOffset();
+
+			if ( $( document ).scrollTop() ) {
+				$( 'html' ).animate( {
+					scrollTop: 0
+				}, 300 );
+			}
+
 			searchValue = $search[0].value;
 
 			if ( !searchValue ) {

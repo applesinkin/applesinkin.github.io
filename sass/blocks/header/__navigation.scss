@@ -1,4 +1,13 @@
 .header__navigation {
-	padding-bottom: 2rem;
-	padding-top: 2rem;
+	background-color: transparent;
+	left: 0;
+	padding-bottom: 1.25em;
+	padding-top: 1.25em;
+	position: fixed;
+	top: 0;
+	transition: background-color 0.3s, padding 0.3s;
+	width: 100%;
+	z-index: 1;
 }
+
+@import '__navigation/--affix';

@@ -270,13 +270,31 @@ figure {
   -webkit-background-size: 200px 200px;
           background-size: 200px 200px; }
 
+.header {
+  font-size: 1.6rem;
+  padding-top: 8.5em; }
+
 .header__navigation {
-  padding-bottom: 2rem;
-  padding-top: 2rem; }
+  background-color: transparent;
+  left: 0;
+  padding-bottom: 1.25em;
+  padding-top: 1.25em;
+  position: fixed;
+  top: 0;
+  -webkit-transition: background-color 0.3s, padding 0.3s;
+  -o-transition: background-color 0.3s, padding 0.3s;
+  transition: background-color 0.3s, padding 0.3s;
+  width: 100%;
+  z-index: 1; }
+
+.header__navigation--affix {
+  background-color: #000000;
+  padding-bottom: 0.25em;
+  padding-top: 0.25em; }
 
 .header__search {
-  padding-bottom: 2.5rem;
-  padding-top: 2.5rem; }
+  padding-bottom: 1.5625em;
+  padding-top: 1.5625em; }
 
 .columns {
   -webkit-box-align: start;
