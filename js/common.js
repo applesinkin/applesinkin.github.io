@@ -79,7 +79,7 @@
 	// Animation on Ajax Request 
 	$( document ).ajaxComplete( function() {
 		if ( $mainList.hasClass( 'main-list--loading' ) ) {
-			$mainList.removeClass( 'main-list--loading' );
+			// $mainList.removeClass( 'main-list--loading' );
 		}
 
 		if ( infiniteScroll && ( ( $( document ).height() ) > $( window ).height() ) ) {
@@ -87,18 +87,6 @@
 		}
 	} );
 
-
-	function showGIF( image ) {
-		image.attr( 'src', function( img, src ) {
-			return imageSrc.replace( '200w_s.gif', '200w.gif' );
-		} );
-	};
-
-	function hideGIF( image ) {
-		image.attr( 'src', function( img, src ) {
-			return imageSrc;
-		} );
-	};
 
 	// Search and Load New Posts
 	function loadNewPosts() {
@@ -109,17 +97,27 @@
 				return;
 			}
 
-			$mainList.addClass( 'main-list--loading' );
+			// $mainList.addClass( 'main-list--loading' );
 			
 			resetOffset();
 			searchValue = $search[0].value;
 
 			if ( !searchValue ) {
 				
-				$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
-				.done( function( data ) {
-					showPagination();
-					$mainList.html( renderHTML( data.data ) );
+				$mainList.animate( {
+					opacity: 0,
+				}, 300, function() {
+
+					$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
+					.done( function( data ) {
+						showPagination();
+						$mainList.html( renderHTML( data.data ) );
+
+						$mainList.animate( {
+							opacity: 1,
+						}, 300 );
+					} );
+
 				} );
 
 				return;
@@ -127,15 +125,25 @@
 
 			searchValueEnc = encodeSpacesURL( searchValue );
 			
-			$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
-			.done( function( data ) {
-				totalCount = data.pagination.total_count;
-				if ( totalCount != 0 ) {
-					( totalCount > limit ) ? showPagination() : hidePagination();
-					$mainList.html( renderHTML( data.data ) );
-				} else {
-					loadSinglePost404();
-				}
+			$mainList.animate( {
+				opacity: 0,
+			}, 300, function() {
+
+				$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
+				.done( function( data ) {
+					totalCount = data.pagination.total_count;
+
+					if ( totalCount != 0 ) {
+						( totalCount > limit ) ? showPagination() : hidePagination();
+						$mainList.html( renderHTML( data.data ) );
+					} else {
+						loadSinglePost404();
+					}
+
+					$mainList.animate( {
+						opacity: 1,
+					}, 300 );
+				} );
 			} );
 
 		}, 1000 );
@@ -239,6 +247,20 @@
 		if ( $( '.pagination' ).hasClass( 'pagination--hidden' ) ) {
 			$( '.pagination' ).removeClass( 'pagination--hidden' );
 		}
+	};
+
+	// Enable GIF Animation
+	function showGIF( image ) {
+		image.attr( 'src', function( img, src ) {
+			return imageSrc.replace( '200w_s.gif', '200w.gif' );
+		} );
+	};
+
+	// Enable GIF Thumbnail
+	function hideGIF( image ) {
+		image.attr( 'src', function( img, src ) {
+			return imageSrc;
+		} );
 	};
 
 
