@@ -109,12 +109,6 @@
 			
 			resetOffset();
 
-			if ( $( document ).scrollTop() ) {
-				$( 'html' ).animate( {
-					scrollTop: 0
-				}, 300 );
-			}
-
 			searchValue = $search[0].value;
 
 			if ( !searchValue ) {
@@ -126,6 +120,7 @@
 					$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
 					.done( function( data ) {
 						showPagination();
+						$( 'html' ).scrollTop( 0 );
 						$mainList.html( renderHTML( data.data ) );
 
 						$mainList.animate( {
@@ -147,6 +142,7 @@
 				$.get( '//api.giphy.com/v1/gifs/search?q=' + searchValueEnc + '&api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
 				.done( function( data ) {
 					totalCount = data.pagination.total_count;
+					$( 'html' ).scrollTop( 0 );
 
 					if ( totalCount != 0 ) {
 						( totalCount > limit ) ? showPagination() : hidePagination();
