@@ -14,6 +14,7 @@
 			offset = 0,
 			searchValue,
 			totalCount,
+			$image,
 			imageSrc,
 			
 			timerImg,
@@ -38,8 +39,10 @@
 	// Get More Posts on Scroll ( "infinite" scroll )
 	$( window ).on( 'scroll', function() {
 
-		if ( $( window ).scrollTop() ) {
-			$headerNav.addClass( 'header__navigation--affix' );
+		if ( $( window ).scrollTop() ) {		
+			if ( !$headerNav.hasClass( 'header__navigation--affix' ) ) {
+				$headerNav.addClass( 'header__navigation--affix' );
+			}
 		} else {
 			$headerNav.removeClass( 'header__navigation--affix' );
 		}
@@ -72,15 +75,16 @@
 	$( 'body' )
 	.on( 'mouseenter', '.main-list__item-img', function() {
 		$this = $( this );
-		imageSrc = $this.attr( 'src' );
 
 		timerImg = window.setTimeout( function() {
-			showGIF( $this );
+			$image = $this;
+			imageSrc = $image.attr( 'src' );
+			showGIF();
 		}, 500 );
 	} )
 	.on( 'mouseleave', '.main-list__item-img', function() {
 		clearTimeout( timerImg );
-		hideGIF( $this );
+		hideGIF();
 	} );
 
 
@@ -221,7 +225,7 @@
 	function renderHTML404( data ) {
 		var htmlstring = '';
 		htmlstring += '<div class="columns__column columns__column--sm-3-4 text-center">';
-			htmlstring += '<h5 class="main-list__item-title">Not Found</h5>';
+			htmlstring += '<h5 class="main-list__item-title">"' + searchValueEnc + '" - Not Found</h5>';
 			htmlstring += '<figure class="main-list__item main-list__item--not-found">';
 				htmlstring += '<img class="main-list__item-img" src="' + data.image_original_url + '" alt="" />';
 			htmlstring += '</div>';
@@ -260,18 +264,20 @@
 		}
 	};
 
-	// Enable GIF Animation
-	function showGIF( image ) {
-		image.attr( 'src', function( img, src ) {
+		// Enable GIF Animation
+	function showGIF() {
+		$image.attr( 'src', function( img, src ) {
 			return imageSrc.replace( '200w_s.gif', '200w.gif' );
 		} );
 	};
 
 	// Enable GIF Thumbnail
-	function hideGIF( image ) {
-		image.attr( 'src', function( img, src ) {
-			return imageSrc;
-		} );
+	function hideGIF() {
+		if ( imageSrc ) {
+			$image.attr( 'src', function( img, src ) {
+				return imageSrc;
+			} );
+		}
 	};
 
 
