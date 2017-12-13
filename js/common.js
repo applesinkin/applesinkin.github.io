@@ -88,7 +88,7 @@
 	} );
 
 
-	// Animation on Ajax Request 
+	// Pagination hide event 
 	$( document ).ajaxComplete( function() {
 
 		$( '.main-list__item-img' ).on( 'load', function() {
@@ -152,6 +152,7 @@
 						( totalCount > limit ) ? showPagination() : hidePagination();
 						$mainList.html( renderHTML( data.data ) );
 					} else {
+						$mainList.html( '' );
 						loadSinglePost404();
 					}
 
