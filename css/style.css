@@ -374,6 +374,7 @@ figure {
     content: '\e804';
     font-family: 'icons';
     left: 1.5rem;
+    opacity: 0.5;
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-50%);
