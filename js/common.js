@@ -36,9 +36,10 @@
 	} );
 
 
-	// Get More Posts on Scroll ( "infinite" scroll )
+	// Actions on Scroll ( sticky menu & "infinite" scroll )
 	$( window ).on( 'scroll', function() {
 
+		// Sticky Menu
 		if ( $( window ).scrollTop() ) {		
 			if ( !$headerNav.hasClass( 'header__navigation--affix' ) ) {
 				$headerNav.addClass( 'header__navigation--affix' );
@@ -47,7 +48,7 @@
 			$headerNav.removeClass( 'header__navigation--affix' );
 		}
 
-
+		// "infinite" scroll
 		if( timerScroll ) {
 			window.clearTimeout(timerScroll);
 		}
@@ -88,7 +89,7 @@
 	} );
 
 
-	// Pagination hide event 
+	// Pagination hide on document height calculate 
 	$( document ).ajaxComplete( function() {
 
 		$( '.main-list__item-img' ).on( 'load', function() {
@@ -137,7 +138,7 @@
 				return;
 			}
 
-			searchValueEnc = encodeSpacesURL( searchValue );
+			searchValueEnc = encodeURLValue( searchValue );
 			
 			$mainList.animate( {
 				opacity: 0,
@@ -249,7 +250,8 @@
 	};
 
 	// Encode URI compomnent
-	function encodeSpacesURL ( value ) {
+	function encodeURLValue ( value ) {
+		console.log( encodeURIComponent( value ).replace( /%20/g, '+' ) );
 		return encodeURIComponent( value ).replace( /%20/g, '+' );
 	};
 
