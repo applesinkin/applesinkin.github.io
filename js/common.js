@@ -230,7 +230,7 @@
 	function renderHTML404( data ) {
 		var htmlstring = '';
 		htmlstring += '<div class="columns__column columns__column--sm-3-4 text-center">';
-			htmlstring += '<h5 class="main-list__item-title">"' + searchValueEnc + '" - Not Found</h5>';
+			htmlstring += '<h5 class="main-list__item-title">"' + searchValue + '" - Not Found</h5>';
 			htmlstring += '<figure class="main-list__item main-list__item--not-found">';
 				htmlstring += '<img class="main-list__item-img" src="' + data.image_original_url + '" alt="" />';
 			htmlstring += '</div>';
