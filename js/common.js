@@ -94,19 +94,15 @@
 
 		var imgIndex = 1;
 
-
 		$( '.main-list__item-img' ).on( 'load', function() {
 
 			if ( imgIndex == limit ) {
-			
 				if ( infiniteScroll && ( ( $( document ).height() ) <= $( window ).height() ) ) {
 					( ( totalCount > limit ) || ( totalCount == -1 ) ) ? showPagination() : hidePagination(); 
 				} else {
 					hidePagination();
 				}
-
 			}
-
 			imgIndex ++;
 
 		} );
@@ -261,7 +257,6 @@
 
 	// Encode URI compomnent
 	function encodeURLValue ( value ) {
-		console.log( encodeURIComponent( value ).replace( /%20/g, '+' ) );
 		return encodeURIComponent( value ).replace( /%20/g, '+' );
 	};
 
@@ -288,6 +283,7 @@
 
 	// Enable GIF Thumbnail
 	function hideGIF() {
+		console.log( imageSrc );
 		if ( imageSrc ) {
 			$image.attr( 'src', function( img, src ) {
 				return imageSrc;
@@ -295,27 +291,11 @@
 		}
 	};
 
-
-	/*	To Top */
-	
-	if ( $( '#to-top' ).length ) {
-		
-		var $toTop = $( "#to-top" ),
-				scrollSpeed = 800;
-		
-		// Scroll to top on button click	
-
-		$toTop.on( 'click', function( e ) {
-			e.preventDefault();
-			scrollToPageTop( scrollSpeed );
-			return false;
-		} );
-
-		function scrollToPageTop( scrollSpeed ) {
-			$( 'html' ).animate( {
-				scrollTop: 0
-			}, scrollSpeed );
-		}
-	};
+	/* To Top */
+	function scrollToPageTop( scrollSpeed ) {
+		$( 'html' ).animate( {
+			scrollTop: 0
+		}, scrollSpeed );
+	}
 
 } ) ( jQuery );
