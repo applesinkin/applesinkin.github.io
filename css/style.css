@@ -374,6 +374,12 @@ figure {
 input.search__input {
   padding-left: 3em; }
 
+.pagination {
+  display: none; }
+
+.pagination--show {
+  display: block; }
+
 .pagination--hidden {
   display: none; }
 

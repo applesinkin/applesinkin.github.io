@@ -13,7 +13,7 @@
 			limit = 20,
 			offset = 0,
 			searchValue,
-			totalCount,
+			totalCount = -1,
 			$image,
 			imageSrc,
 			
@@ -89,13 +89,26 @@
 	} );
 
 
-	// Pagination hide on document height calculate 
+	// Pagination show/hide on document height calculate 
 	$( document ).ajaxComplete( function() {
 
+		var imgIndex = 1;
+
+
 		$( '.main-list__item-img' ).on( 'load', function() {
-			if ( infiniteScroll && ( ( $( document ).height() ) > $( window ).height() ) ) {
-				hidePagination();
+
+			if ( imgIndex == limit ) {
+			
+				if ( infiniteScroll && ( ( $( document ).height() ) <= $( window ).height() ) ) {
+					( ( totalCount > limit ) || ( totalCount == -1 ) ) ? showPagination() : hidePagination(); 
+				} else {
+					hidePagination();
+				}
+
 			}
+
+			imgIndex ++;
+
 		} );
 
 	} );
@@ -109,14 +122,14 @@
 			if ( searchValue == $search[0].value ) {
 				return;
 			}
-
-			// $mainList.addClass( 'main-list--loading' );
 			
 			resetOffset();
 
 			searchValue = $search[0].value;
 
 			if ( !searchValue ) {
+
+				totalCount = -1;
 				
 				$mainList.animate( {
 					opacity: 0,
@@ -124,7 +137,6 @@
 
 					$.get( '//api.giphy.com/v1/gifs/trending?api_key=' + apiKey + '&limit=' + limit + '&offset=' + offset )
 					.done( function( data ) {
-						showPagination();
 						$( 'html' ).scrollTop( 0 );
 						$mainList.html( renderHTML( data.data ) );
 
@@ -150,7 +162,6 @@
 					$( 'html' ).scrollTop( 0 );
 
 					if ( totalCount != 0 ) {
-						( totalCount > limit ) ? showPagination() : hidePagination();
 						$mainList.html( renderHTML( data.data ) );
 					} else {
 						$mainList.html( '' );
@@ -204,7 +215,6 @@
 	function loadSinglePost404() {
 		$.get( '//api.giphy.com/v1/gifs/random?api_key=' + apiKey + '&tag=404' )
 		.done( function( data ) {
-			hidePagination();
 			$mainList.html( renderHTML404( data.data ) );
 		} );
 	};
@@ -257,17 +267,15 @@
 
 	// Hide Pagination
 	function hidePagination() {
-		if ( $( '.pagination' ).hasClass( 'pagination--hidden' ) ) {
-			return;
-		} else {
-			$( '.pagination' ).addClass( 'pagination--hidden' );
+		if ( $( '.pagination' ).hasClass( 'pagination--show' ) ) {
+			$( '.pagination' ).removeClass( 'pagination--show' );
 		}
 	};
 
 	// Show Pagination
 	function showPagination() {
-		if ( $( '.pagination' ).hasClass( 'pagination--hidden' ) ) {
-			$( '.pagination' ).removeClass( 'pagination--hidden' );
+		if ( !$( '.pagination' ).hasClass( 'pagination--show' ) ) {
+			$( '.pagination' ).addClass( 'pagination--show' );
 		}
 	};
 
