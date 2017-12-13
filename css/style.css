@@ -272,7 +272,10 @@ figure {
 
 .header {
   font-size: 1.6rem;
-  padding-top: 8.5em; }
+  padding-top: 10em; }
+  @media (min-width: 768px) {
+    .header {
+      padding-top: 8.5em; } }
 
 .header__navigation {
   background-color: transparent;
@@ -291,6 +294,12 @@ figure {
   background-color: #000000;
   padding-bottom: 0.25em;
   padding-top: 0.25em; }
+
+.header__logo {
+  padding-top: 1em; }
+  @media (min-width: 768px) {
+    .header__logo {
+      padding: 0; } }
 
 .header__search {
   padding-bottom: 1.5625em;
