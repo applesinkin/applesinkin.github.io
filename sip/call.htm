@@ -43,33 +43,29 @@
 
         window.onload = function () {
             oReadyStateTimer = setInterval(function () {
-                console.log(document.readyState);
                 if (document.readyState === "complete") {
                     clearInterval(oReadyStateTimer);
-                    // initialize SIPML5
-                    SIPml.init(postInit);
+                    SIPml.init(function() {
+
+                        btnRegister.disabled = false;
+
+                        oConfigCall = {
+                            audio_remote: document.getElementById("audio_remote"),
+                            video_local: undefined,
+                            video_remote: undefined,
+                            screencast_window_id: 0x00000000, // entire desktop
+                            bandwidth: { audio: undefined, video: undefined },
+                            video_size: { minWidth: undefined, minHeight: undefined, maxWidth: undefined, maxHeight: undefined },
+                            events_listener: { events: '*', listener: onSipEventSession },
+                            sip_caps: [
+                                { name: '+g.oma.sip-im' },
+                                { name: 'language', value: '\"en,fr\"' }
+                            ]
+                        };
+
+                    });
                 }
             }, 500);
-        };
-
-
-
-        function postInit() {
-            btnRegister.disabled = false;
-
-            oConfigCall = {
-                audio_remote: document.getElementById("audio_remote"),
-                video_local: undefined,
-                video_remote: undefined,
-                screencast_window_id: 0x00000000, // entire desktop
-                bandwidth: { audio: undefined, video: undefined },
-                video_size: { minWidth: undefined, minHeight: undefined, maxWidth: undefined, maxHeight: undefined },
-                events_listener: { events: '*', listener: onSipEventSession },
-                sip_caps: [
-                    { name: '+g.oma.sip-im' },
-                    { name: 'language', value: '\"en,fr\"' }
-                ]
-            };
         };
 
 
@@ -136,6 +132,8 @@
 
                 // create call session
                 oSipSessionCall = oSipStack.newSession(s_type, oConfigCall);
+
+                console.log(oSipSessionCall.call(txtPhoneNumberValue));
 
                 // make call
                 if (oSipSessionCall.call(txtPhoneNumberValue) != 0) {
