@@ -27,6 +27,48 @@
         // makes a call (SIP INVITE)
         function sipCall() {
         	console.log("call", JsSIP);
+
+	        var socket = new JsSIP.WebSocketInterface('wss://web-call.lexico-telecom.com:8089/ws');
+	        var configuration = {
+	            sockets : [ socket ],
+	            uri : 'sip:201@10.0.22.9:5060',
+	            registrar_server: '10.0.22.9:5060',
+	            ws_servers: 'wss://wev-call.lexico-telecom.com:8089/ws',
+	            authorization_user: '201',
+	            password : '7001sip1007',
+	            register: true,
+	        };
+
+	        ua.current = new JsSIP.UA(configuration);
+
+	        ua.current.start();
+
+	        // Register callbacks to desired call events
+	        var eventHandlers = {
+	            'progress': function(e) {
+	                console.log('call is in progress');
+	            },
+	            'failed': function(e) {
+	                console.log('call failed with cause: '+ e.data.cause);
+	            },
+	            'ended': function(e) {
+	                console.log('call ended with cause: '+ e.data.cause);
+	            },
+	            'confirmed': function(e) {
+	                alert("call confirmed");
+	                console.log("call confrmed", e);
+	            }
+	        };
+
+	        var options = {
+	            'eventHandlers' : eventHandlers,
+	            'mediaConstraints' : { 'audio': true, 'video': false }
+	        };
+
+	        var session = ua.current.call('1111', options);
+
+	        console.log();
+
         }
 
     </script>
@@ -38,7 +80,6 @@
 <div class="navbar navbar-fixed-top">
     <div id="divNavbarInner" class="navbar-inner">
         <div class="container">
-            <img alt="sipML5" class="brand" src="./images/sipml-34x39.png" />
         </div>
     </div>
 </div>
