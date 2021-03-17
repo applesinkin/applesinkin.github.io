@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<!--
+* Copyright (C) 2012-2018 Doubango Telecom <http://www.doubango.org>
+* License: BSD
+* This file is part of Open Source sipML5 solution <http://www.sipml5.org>
+-->
+<html>
+<!-- head -->
+<head>
+    <meta charset="utf-8" />
+    <title>jssip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="jssip.js" type="text/javascript"> </script>
+
+    <!-- Styles -->
+    <style type="text/css">
+        body {
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+    </style>
+
+    <!-- Javascript code -->
+    <script type="text/javascript">
+
+        // makes a call (SIP INVITE)
+        function sipCall() {
+        	console.log("call", JsSIP);
+        }
+
+    </script>
+</head>
+
+
+
+<body>
+<div class="navbar navbar-fixed-top">
+    <div id="divNavbarInner" class="navbar-inner">
+        <div class="container">
+            <img alt="sipML5" class="brand" src="./images/sipml-34x39.png" />
+        </div>
+    </div>
+</div>
+
+
+	<div class="container">
+	    <div class="row-fluid">
+			<button id="btnCall" class="btn btn-primary" onclick='sipCall();'>Call</button>
+	    </div>
+	</div>
+
+</body>
+
+</html>
