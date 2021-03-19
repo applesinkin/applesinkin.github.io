@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<!--
+* Copyright (C) 2012-2018 Doubango Telecom <http://www.doubango.org>
+* License: BSD
+* This file is part of Open Source sipML5 solution <http://www.sipml5.org>
+-->
+<html>
+<!-- head -->
+<head>
+    <meta charset="utf-8" />
+    <title>jssip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="jssip.js" type="text/javascript"> </script>
+
+    <!-- Styles -->
+    <style type="text/css">
+        body {
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+    </style>
+
+    <!-- Javascript code -->
+    <script type="text/javascript">
+
+        // makes a call (SIP INVITE)
+        function sipCall() {
+        	console.log("call", JsSIP);
+
+	        var socket = new JsSIP.WebSocketInterface('wss://web-call.lexico-telecom.com:8089/ws');
+	        var configuration = {
+	            sockets : [ socket ],
+	            uri : 'sip:201@10.0.22.9:5060',
+	            registrar_server: '10.0.22.9:5060',
+	            ws_servers: 'wss://wev-call.lexico-telecom.com:8089/ws',
+	            authorization_user: '201',
+	            password : '7001sip1007',
+	            register: true,
+	        };
+
+	        ua.current = new JsSIP.UA(configuration);
+
+	        ua.current.start();
+
+	        // Register callbacks to desired call events
+	        var eventHandlers = {
+	            'progress': function(e) {
+	                console.log('call is in progress');
+	            },
+	            'failed': function(e) {
+	                console.log('call failed with cause: '+ e.data.cause);
+	            },
+	            'ended': function(e) {
+	                console.log('call ended with cause: '+ e.data.cause);
+	            },
+	            'confirmed': function(e) {
+	                alert("call confirmed");
+	                console.log("call confrmed", e);
+	            }
+	        };
+
+	        var options = {
+	            'eventHandlers' : eventHandlers,
+	            'mediaConstraints' : { 'audio': true, 'video': false }
+	        };
+
+	        var session = ua.current.call('1111', options);
+
+	        console.log();
+
+        }
+
+    </script>
+</head>
+
+
+
+<body>
+<div class="navbar navbar-fixed-top">
+    <div id="divNavbarInner" class="navbar-inner">
+        <div class="container">
+        </div>
+    </div>
+</div>
+
+
+	<div class="container">
+	    <div class="row-fluid">
+			<button id="btnCall" class="btn btn-primary" onclick='sipCall();'>Call</button>
+	    </div>
+	</div>
+
+</body>
+
+</html>
